@@ -17,6 +17,17 @@ int waitTime = 100000;
 int main() 
 {
     // ALL the repeating code is contained in a  “while loop”
+
+    //This code is a boot up sequence which I will use hopefully on all the rest of my programs. It turns on the green LED, then the Blue LED then the Red LED befor turning them all off.
+    greenLED = 1;
+    wait_us(300000);
+    blueLED = 1;
+    wait_us(300000);    
+    redLED = 1;
+    wait_us(300000);    
+    greenLED = 0;
+    blueLED = 0;
+    redLED = 0;
     while(true)
     { 
         //The code between the { curly braces } is the code that is repeated forever
