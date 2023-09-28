@@ -2,10 +2,23 @@
 #include "uop_msb.h"
 using namespace uop_msb;
 
-#define WAIT_TIME_MS 500 
+#define dotTime 150000 
 DigitalOut greenLED(TRAF_GRN1_PIN);
+DigitalOut gLED(LED1);
+DigitalOut rLED(LED3);
+DigitalOut bLED(LED2);
 Buzzer buzz;
 Buttons buttons;
+
+void startUp();
+void bitBreak();
+void letterBreak();
+void wordBreak();
+void dot();
+void dash();
+void S();
+void O();
+
 
 // TIP: (I suggest you read this!)
 //
@@ -14,26 +27,67 @@ Buttons buttons;
 
 int main()
 {
+
+    
+    startUp();
     //Wait for the BLUE button to be pressed (otherwise this becomes super annoying!)
     while (buttons.BlueButton == 0);
     
     //Repeat everything "forever" (until the power is removed or the chip is reset)
     while (true)
     {
-        //On for 500ms
-        greenLED = 1;
-        buzz.playTone("C");
-        wait_us(WAIT_TIME_MS * 1000);  //500ms
-
-
-        //Off for 500ms
-        greenLED = 0;
-        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
-        wait_us(WAIT_TIME_MS * 1000);  //500ms
-
-        //Pause
-        buzz.rest();
-        wait_us(WAIT_TIME_MS * 1000);
+       S();
+       O();
+       S();
+       wordBreak();
 
     }
+}
+
+void startUp(){
+    gLED = 1;
+    wait_us(300000);
+    bLED = 1;
+    wait_us(300000);    
+    rLED = 1;
+    wait_us(300000);    
+    gLED = 0;
+    bLED = 0;
+    rLED = 0;
+}
+void bitBreak(){
+    greenLED = 0;
+    buzz.rest();
+    wait_us(dotTime);
+}
+void letterBreak(
+){
+    wait_us(dotTime*2);
+}
+void wordBreak(){
+    wait_us(dotTime*3);
+}
+void dot(){
+    greenLED = 1;
+    buzz.playTone("C");
+    wait_us(dotTime);
+    bitBreak();
+}
+void dash(){
+    greenLED = 1;
+    buzz.playTone("C");
+    wait_us(dotTime*3);
+    bitBreak();
+}
+void S(){
+    dot();
+    dot();
+    dot();
+    letterBreak();
+}
+void O(){
+    dash();
+    dash();
+    dash();
+    letterBreak();
 }
