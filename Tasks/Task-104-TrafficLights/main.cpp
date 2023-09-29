@@ -1,7 +1,7 @@
 #include "uop_msb.h"
 using namespace uop_msb;
 
-#define WAIT_TIME_MS 500 
+#define secTime 1000000 
 
 DigitalOut red(TRAF_RED1_PIN,1);         //Note the initial state
 DigitalOut amber(TRAF_YEL1_PIN,0);
@@ -9,29 +9,56 @@ DigitalOut green(TRAF_GRN1_PIN,0);
 
 LCD_16X2_DISPLAY lcd;
 
+void redLight();
+void redYellowLight();
+void greenLight();
+void yellowLight();
+
 int main()
 {
-    lcd.puts("RED");
-    wait_us(1000000);
 
-    amber = 1;
+    while(true){
+        redLight();
+        wait_us(10*secTime);
+
+        redYellowLight();
+        wait_us(2*secTime);
+
+        greenLight();    
+        wait_us(10*secTime);
+
+        yellowLight();
+        wait_us(200000);
+    }
+
+}
+
+
+void redLight(){
+    red = 1;
+    amber = 0;
+    green = 0;
     lcd.cls();
-    lcd.puts("Amber");
-    wait_us(1000000);
-
+    lcd.puts("Stop");
+}
+void redYellowLight(){
+    red = 1;
+    amber = 1;
+    green = 0;
+    lcd.cls();
+    lcd.puts("Ready");
+}
+void greenLight(){
+    red = 0;
+    amber = 0;
     green = 1;
     lcd.cls();
-    lcd.puts("Green");    
-    wait_us(1000000);
-
+    lcd.puts("Go!");
+}
+void yellowLight(){
+    red = 0;
+    amber = 1;
+    green = 0;
     lcd.cls();
-    lcd.puts("TASK-104");
-
-    while (true)
-    {
-        red = !red;
-        amber = !amber;
-        green = !green;
-        wait_us(WAIT_TIME_MS * 1000);
-    }
+    lcd.puts("Hurry up");
 }
