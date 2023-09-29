@@ -19,16 +19,16 @@ int main()
 
     while(true){
         redLight();
-        wait_us(10*secTime);
+        
 
         redYellowLight();
-        wait_us(2*secTime);
+
 
         greenLight();    
-        wait_us(10*secTime);
+
 
         yellowLight();
-        wait_us(200000);
+
     }
 
 }
@@ -40,6 +40,7 @@ void redLight(){
     green = 0;
     lcd.cls();
     lcd.puts("Stop");
+    wait_us(10*secTime);
 }
 void redYellowLight(){
     red = 1;
@@ -47,6 +48,7 @@ void redYellowLight(){
     green = 0;
     lcd.cls();
     lcd.puts("Ready");
+    wait_us(2*secTime);
 }
 void greenLight(){
     red = 0;
@@ -54,11 +56,21 @@ void greenLight(){
     green = 1;
     lcd.cls();
     lcd.puts("Go!");
+    wait_us(10*secTime);
 }
 void yellowLight(){
     red = 0;
-    amber = 1;
     green = 0;
     lcd.cls();
     lcd.puts("Hurry up");
+    
+    for(int i = 0; i<4; i++){
+        amber = 1;
+        wait_us(secTime/4);
+        amber = 0;
+        wait_us(secTime/4);
+
+    }
+    
+    
 }
