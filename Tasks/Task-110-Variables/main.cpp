@@ -18,58 +18,102 @@ DigitalIn BlueButton(USER_BUTTON);
 
 BusOut ledData(LED_D0_PIN, LED_D1_PIN, LED_D2_PIN, LED_D3_PIN, LED_D4_PIN, LED_D5_PIN, LED_D6_PIN, LED_D7_PIN);
 
+int mode = 0;
+int modeMax = 2;
+void allOn();
+void checkSwitch();
+
 
 int main()
 {
     printf("\nTASK-110\n");
+    int count = 1;
+    LED_BAR_OE = 0;
 
-    // Integer
-    int count = 0;
-    printf("count = %d\n", count);
+    
+    while(true){
+        if(mode == 0){
+            while (count<128){
+                printf("Count = %i\n",count);
+                ledData = count;
+                allOn();
+                count*=2;
+            }
+            while(count>1){
+                printf("Count = %i\n",count);
+                ledData = count;
+                allOn();
+                count = count/2;
+            }
+        }
+        else if(mode == 1){
+            while(count<8){
+                printf("Count = %i. ledData = %f \n",count,(pow(2,count)-1));
+                ledData = pow(2,count)-1;
+                allOn();
+                count++;
+            }
+            count = 1;
+            while(count<7){
+                ledData = 256-pow(2,count);
+                allOn();
+                count++;
+            }
+            while(count>1){
+                ledData = 256-pow(2,count);
+                allOn();
+                count--;
+            }
+            count = 8;
 
-    // Add one to count
-    count = count + 1;
-    printf("New value of count = %d\n", count);
+            while(count>1){
+                printf("Count = %i. ledData = %f \n",count,(pow(2,count)-1));
+                ledData = pow(2,count)-1;
+                allOn();
+                count--;
+            }
+        }
+        else if(mode == 2){
+            for(int i = 8; i>0; i--){
+                count = 0;
+                while(count<i){
+                    ledData = 256-(pow(2,i))+pow(2,count);
+                    allOn();
+                    count++;
+                }
+            }
+            for (int i = 0;i>8; i++){
+                count = 8;
+                while(count>i){
+                    ledData = (pow(2,i)-1)+pow(2,count);
+                    allOn();
+                    count--;
+                }
+            }
+        }
 
-    // Char
-    char character;
-    character = 'A';
-    printf("The character %c has the ASCII code %d\n", character, character);
+    }    
+}
 
-    // Short
-    short shortCount = 32766;
-    printf("The value of shortCount is %hd\n", shortCount);
-    shortCount = shortCount + 1;
-    printf("add 1 and shortCount is %hd\n", shortCount);
+void allOn(){
+    checkSwitch();
+    LED_RED_LE = 1;
+    LED_BLUE_LE = 1;
+    LED_GRN_LE = 1;
+    wait_us(100);
+    LED_GRN_LE = 0;
+    LED_RED_LE = 0;
+    LED_BLUE_LE = 0;
+    wait_us(100000);
+}
 
-    // Long long
-    long long NN = 0x12345678ABCD0001LL; //Literal in HEX
-    printf("A very large number %lld\n", NN);
-    printf("A very large number in hex %llX\n", NN);
-
-    // unsigned
-    unsigned short p = 1; //16 bit
-    printf("unsigned int p = %u\n", p);
-    p = p - 2;
-    printf("Subtract 2. Now unsigned int p = %u\n", p);
-
-    // float 
-    float pi_float = 3.1415926536;
-    printf("The value of pi is approximately %f\n", pi_float);
-
-    // double
-    double pi_double = 3.1415926536l;
-    printf("The value of pi is approximately %lf\n", pi_double);
-
-    // Data type sizes (in bytes)
-    printf("Size of a char is %d bytes\n", sizeof(char));
-    printf("Size of a short is %d bytes\n", sizeof(short));
-    printf("Size of a int is %d bytes\n", sizeof(int));
-    printf("Size of a long is %d bytes\n", sizeof(long));
-    printf("Size of a long long is %d bytes\n", sizeof(long long));
-    printf("Size of a float is %d bytes\n", sizeof(float));
-    printf("Size of a double is %d bytes\n", sizeof(double));
-
-    // Stop
-    while (true);   
+void checkSwitch(){
+    if(BlueButton){
+        if(mode ==modeMax){
+            mode = 0;
+        }
+        else{
+            mode++;
+        }
+    }
 }
