@@ -16,14 +16,14 @@ int main()
 
     while (true)
     {
-        int count = 0;
-        while (count <= 7) 
+        int count = 7;
+        while (count >= 0) 
         {
             printf("count = %d\n", count);
             lights = count;
             wait_us(1000000);
 
-            count = count + 1;
+            count--;
         }
     }
 }
