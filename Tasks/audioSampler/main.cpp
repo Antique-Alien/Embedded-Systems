@@ -1,5 +1,6 @@
 #include "mbed.h"
 
+// GNU Terry Pratchett
 
 // main() runs in its own thread in the OS
 //Defining Inputs and Outputs
@@ -14,7 +15,7 @@
 
 
 
-void ledStripHeight(int);
+void ledStripHeight();
 float micLvl = 0.0;
 //Conversion Functions & Variables
     int convertTo24(float);
@@ -26,6 +27,9 @@ float micLvl = 0.0;
     void grnLatch();
     void blueLatch();
     void ledClear();
+    void blueClear();
+    void redClear();
+    void grnClear();
     int waitTime = 100;//How long the LEDs are unlocked.
 //Increment System
     void incrUp();
@@ -33,20 +37,18 @@ float micLvl = 0.0;
     float incrAmt = 0.01;
 //Threads
     Thread upThread;
-    Thread downThread;
-    
+    Thread downThread;  
 
 int main()
 {
     ledStripEnable = 0;
+    ledClear();
     upThread.start(incrUp);
     downThread.start(incrDown);
     while (true) {
         printf("Scale = %f\n",scale);
         micLvl = mic;
-        ledStripHeight(convertTo24(micLvl));
-        wait_us(10);
-        ledClear();
+        ledStripHeight();
     }
 }
 
@@ -59,11 +61,13 @@ int convertTo24(float input){
 } // Converts an float from between 1 and zero to an integer between 0 and 24
 
 
-void ledStripHeight(int num24){
-    int tempNum24 = num24;
+void ledStripHeight(){
+    int tempNum24 = convertTo24(mic);
     if(tempNum24<=8){
         leds = pow(2,tempNum24)-1;
         redLatch();
+        grnClear();
+        blueClear();
     }
     else{
         leds = pow(2,8)-1;
@@ -72,6 +76,7 @@ void ledStripHeight(int num24){
         if(tempNum24<=8){
             leds = pow(2,tempNum24)-1;
             grnLatch();
+            blueClear();
         }
         else{
             leds = pow(2,8)-1;
@@ -82,6 +87,7 @@ void ledStripHeight(int num24){
             
         }
     }
+    wait_us(1000);
 }
     
 
@@ -105,6 +111,18 @@ void ledClear(){
     redLatch();
     grnLatch();
     blueLatch();
+}
+void blueClear(){
+    leds = 0;
+    blueLatch();
+}
+void redClear(){
+    leds = 0;
+    redLatch();
+}
+void grnClear(){
+    leds = 0;
+    grnLatch();
 }
 void incrUp(){
     int uB;
