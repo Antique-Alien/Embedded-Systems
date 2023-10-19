@@ -102,8 +102,8 @@ SPL06_001_SPI sensor(PB_5, PB_4, PB_3, PB_2);
 
 
 // SD Card 
-#include "SDBlockDevice.h"
-#include "FATFileSystem.h"
+//#include "SDBlockDevice.h"
+//#include "FATFileSystem.h"
 // Instantiate the SDBlockDevice by specifying the SPI pins connected to the SDCard
 // socket. The PINS are: (This can also be done in the JSON file see mbed.org Docs API Storage SDBlockDevice)
 // PB_5    MOSI (Master Out Slave In)
@@ -112,6 +112,6 @@ SPL06_001_SPI sensor(PB_5, PB_4, PB_3, PB_2);
 // PF_3    CS (Chip Select)
 //
 // and there is a Card Detect CD on PF_4 ! (NB this is an Interrupt capable pin..)
-SDBlockDevice sd(PB_5, PB_4, PB_3, PF_3);
+//SDBlockDevice sd(PB_5, PB_4, PB_3, PF_3);
 
 #endif
