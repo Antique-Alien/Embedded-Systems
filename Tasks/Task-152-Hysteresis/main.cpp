@@ -21,12 +21,23 @@ int main()
         unsigned short potVal   = pot.read_u16();
         printf("Potentiometer: %X\n", potVal);
         
-        if (potVal > 0x8000) {
-            redLED = 1;
-            buzz.playTone("C");
-        } else {
-            redLED = 0;
-            buzz.rest();
+        if(redLED == 0){
+            if (potVal > 0x8400) {
+                redLED = 1;
+                buzz.playTone("C");
+            } else {
+                redLED = 0;
+                buzz.rest();
+            }
+        }
+        else{
+            if (potVal < 0x7400) {
+                redLED = 0;
+                buzz.playTone("C");
+            } else {
+                redLED = 1;
+                buzz.rest();
+            }
         }
 
         //Wait 0.25 seconds

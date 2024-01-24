@@ -12,23 +12,34 @@ void setLatch(uint8_t dat, char col);
 void led_init(uint8_t dat, bool enabled);
 int getDelayMS();
 
+int disp = 0;
+int redDisp[10] = {0b01010101,0b10101010,0b01010101,0b10101010,0b01010101,0b10101010,0xff,0xff,0xff,0xff};
+int grnDisp[10] = {0b01010101,0b10101010,0b01010101,0b10101010,0b01010101,0b10101010,0xff,0xff,0xff,0xff};
+int blueDisp[10] = {0b01010101,0b10101010,0b01010101,0b10101010,0b01010101,0b10101010,0xff,0xff,0xff,0xff};
+
+
+
 int main()
 {
     printf("Functions demo\n");
 
     led_init(0x00, true);
+    while (true){
+    
+        //Update the red
+        setLatch(redDisp[disp],'r');
 
-    //Update the red
-    setLatch(0xFF,'r');
+        //Update the green
+        setLatch(grnDisp[disp], 'g');
 
-    //Update the green
-    setLatch(0b10101010, 'g');
+        //Update the blue
+        setLatch(blueDisp[disp], 'b');
+        disp++;
+        if(disp>10){
+            disp = 0;
+        }
 
-    //Update the blue
-    setLatch(0b11001100, 'b');
-
-
-    while(true) {
+    
         //Get delay value
         int delay_ms = getDelayMS();
 
@@ -39,8 +50,7 @@ int main()
         wait_us(delay_ms*1000);
 
         //Disable the latch outputs
-        LED_BAR_OE = 1;
-
+       LED_BAR_OE = 1;
         //Wait
         wait_us(delay_ms*1000);            
     }

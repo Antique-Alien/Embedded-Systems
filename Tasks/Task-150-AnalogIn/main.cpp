@@ -14,6 +14,10 @@ AnalogIn pot(AN_POT_PIN);
 AnalogIn ldr(AN_LDR_PIN);
 AnalogIn mic(MIC_AN_PIN);
 
+void redLedSignal(int);
+void blueLedSignal(int);
+void greenLedSignal(int);
+
 int main()
 {
 
@@ -49,14 +53,49 @@ int main()
         unsigned short micVal   = mic.read_u16(); 
 
         //Write to terminal
-        printf("--------------------------------\n");
-        printf("Potentiometer: %X\n", potVal);
-        printf("Light Dependant Resistor: %X\n", lightVal);
-        printf("Microphone: %X\n", micVal);   
+        //printf("--------------------------------\n");
+        //printf("Potentiometer: %X\n", potVal);
+        //printf("Light Dependant Resistor: %X\n", lightVal);
+        //printf("Microphone: %X\n", micVal);   
 
         //Wait 0.25 seconds
-        wait_us(500000);
+        //wait_us(250000);
+        redLedSignal(potVal);
+        blueLedSignal(lightVal);
+        greenLedSignal(micVal);
 
     }
 }
 
+void redLedSignal(int amount){
+    int settingAmount = (amount/0x2000);
+    if(amount <= 0x2000){
+        settingAmount = 0;
+    }
+
+    ledDisp.setGroup(LatchedLED::LEDGROUP::RED);
+    ledDisp = (2<<settingAmount)-1;
+    wait_us(2000);
+    ledDisp = 0;
+}
+void blueLedSignal(int amount){
+    int settingAmount = (amount/0x2000);
+    if(amount <= 0x2000){
+        settingAmount = 0;
+    }
+
+    ledDisp.setGroup(LatchedLED::LEDGROUP::BLUE);
+    ledDisp = (2<<settingAmount)-1;
+    wait_us(2000);
+    ledDisp = 0;
+}void greenLedSignal(int amount){
+    int settingAmount = (amount/0x2000);
+    if(amount <= 0x2000){
+        settingAmount = 0;
+    }
+
+    ledDisp.setGroup(LatchedLED::LEDGROUP::GREEN);
+    ledDisp = (2<<settingAmount)-1;
+    wait_us(2000);
+    ledDisp = 0;
+}

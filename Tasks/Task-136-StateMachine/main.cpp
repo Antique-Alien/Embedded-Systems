@@ -13,6 +13,8 @@ DigitalOut greenLED(TRAF_GRN1_PIN);     //Green Traffic 1
 //Dual Digit 7-segment Display
 LatchedLED disp(LatchedLED::SEVEN_SEG);
 
+int delayTime = 200;
+
 //Timers
 TimerCompat tmrA;
 TimerCompat tmrB;
@@ -74,7 +76,7 @@ int main()
             break;
 
             case DEBOUNCE_1:
-                if (timeA >= 250) {
+                if (timeA >= delayTime) {
                     stateA = WAITING_FOR_RELEASE;
                     tmrA.stop();
                 }
@@ -89,7 +91,7 @@ int main()
             break;
 
             case DEBOUNCE_2:
-                if (timeA >= 250) {
+                if (timeA >= delayTime) {
                     stateA = WAITING_FOR_PRESS;
                     tmrA.stop();
                 }
@@ -113,7 +115,7 @@ int main()
             break;
 
             case DEBOUNCE_1:
-                if (timeB >= 250) {
+                if (timeB >= delayTime) {
                     stateB = WAITING_FOR_RELEASE;
                     tmrB.stop();
                 }
@@ -128,7 +130,7 @@ int main()
             break;
 
             case DEBOUNCE_2:
-                if (timeB >= 250) {
+                if (timeB >= delayTime) {
                     stateB = WAITING_FOR_PRESS;
                     tmrB.stop();
                 }
